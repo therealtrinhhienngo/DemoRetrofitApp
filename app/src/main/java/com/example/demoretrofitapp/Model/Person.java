@@ -1,7 +1,18 @@
 package com.example.demoretrofitapp.Model;
 
-public class Person {
-    String id, name, role;
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+
+public class Person implements Serializable {
+    @SerializedName("id")
+    String id;
+
+    @SerializedName("name")
+    String name;
+
+    @SerializedName("role")
+    String role;
 
     public Person(String id, String name, String role) {
         this.id = id;

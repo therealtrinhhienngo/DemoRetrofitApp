@@ -43,14 +43,8 @@
             android:id="@+id/inputButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
             android:text="Add" />
 
-        <Button
-            android:id="@+id/inputUpdate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Update" />
     </LinearLayout>
 
     <TextView

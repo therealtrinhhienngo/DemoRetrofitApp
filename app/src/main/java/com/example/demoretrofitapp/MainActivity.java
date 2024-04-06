@@ -1,6 +1,8 @@
 package com.example.demoretrofitapp;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +15,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.demoretrofitapp.ModalFunction.PersonRetrofitFunction;
+import com.example.demoretrofitapp.Model.Person;
+
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
     EditText nameInput, roleInput;
@@ -31,6 +36,12 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        Intent intent = getIntent();
+        Person receivedObject = (Person) intent.getSerializableExtra("valueObj");
+        String mode = intent.getStringExtra("mode");
+
+        Log.d("Person Obj Get", "Mode Get: " + mode);
+
         nameInput = findViewById(R.id.inputName);
         roleInput = findViewById(R.id.inputRole);
         addInputButton = findViewById(R.id.inputButton);
@@ -38,13 +49,30 @@ public class MainActivity extends AppCompatActivity {
 
         personRetrofitFunction = new PersonRetrofitFunction();
 
+        nameInput.setText(receivedObject.getName());
+        roleInput.setText(receivedObject.getRole());
+
+        if (Objects.equals(mode, "update")){
+            addInputButton.setText("Update");
+        }
+        else {
+            addInputButton.setText("Add");
+        }
+
         addInputButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String name = nameInput.getText().toString();
                 String role = roleInput.getText().toString();
 
-                personRetrofitFunction.insertPersonFunction(name, role, MainActivity.this, resultDisplay);
+                if(Objects.equals(mode, "update")){
+                    personRetrofitFunction.updatePersonFunction(receivedObject.getId(), name, role, MainActivity.this, resultDisplay);
+                    startActivity(new Intent(MainActivity.this, ListPersonActivity.class));
+                }
+                else{
+                    personRetrofitFunction.insertPersonFunction(name, role, MainActivity.this, resultDisplay);
+                    startActivity(new Intent(MainActivity.this, ListPersonActivity.class));
+                }
             }
         });
     }

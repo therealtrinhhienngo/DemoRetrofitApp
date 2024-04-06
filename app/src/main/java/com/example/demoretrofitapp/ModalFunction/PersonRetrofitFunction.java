@@ -12,6 +12,7 @@ import com.example.demoretrofitapp.Model.Person;
 import com.example.demoretrofitapp.Model.ServerResponse;
 import com.google.gson.GsonBuilder;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import retrofit2.Call;
@@ -45,14 +46,68 @@ public class PersonRetrofitFunction {
             public void onResponse(@NonNull Call<ServerResponse> call, @NonNull Response<ServerResponse> response) {
                 if(response.isSuccessful()){
 //                    Toast.makeText(context, "Add Success!!!", Toast.LENGTH_SHORT).show();
-                    resultDisplay.setText("Add Failed!!!");
+                    resultDisplay.setText("Add Success!!!");
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<ServerResponse> call, @NonNull Throwable t) {
 //                Toast.makeText(context, "Add Failed!!!", Toast.LENGTH_SHORT).show();
-                resultDisplay.setText("Add Success!!!");
+                resultDisplay.setText("Add Failed!!!");
+                Log.d("Add Error", t.toString());
+            }
+        });
+    }
+
+    public void deletePersonFunction(String id, Context context){
+        // Call insert function in AppInterface
+        InsertPersonInterface insertPersonInterface = retrofit.create(InsertPersonInterface.class);
+
+        Call<ServerResponse> call = insertPersonInterface.deletePerson(id);
+        call.enqueue(new Callback<ServerResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<ServerResponse> call, @NonNull Response<ServerResponse> response) {
+                if(response.isSuccessful()){
+//                    Toast.makeText(context, "Add Success!!!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Delete Success!!!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ServerResponse> call, @NonNull Throwable t) {
+//                Toast.makeText(context, "Add Failed!!!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Delete Failed!!!", Toast.LENGTH_SHORT).show();
+                Log.d("Delete Error", t.toString());
+            }
+        });
+    }
+
+    public void updatePersonFunction(String id, String name, String role, Context context, TextView resultDisplay){
+        // Make new obj
+        Person newObj = new Person();
+
+        // Put insert data into obj
+        newObj.setId(id);
+        newObj.setName(name);
+        newObj.setRole(role);
+
+        // Call insert function in AppInterface
+        InsertPersonInterface insertPersonInterface = retrofit.create(InsertPersonInterface.class);
+
+        Call<ServerResponse> call = insertPersonInterface.updatePerson(newObj.getId(), newObj.getName(), newObj.getRole());
+        call.enqueue(new Callback<ServerResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<ServerResponse> call, @NonNull Response<ServerResponse> response) {
+                if(response.isSuccessful()){
+//                    Toast.makeText(context, "Add Success!!!", Toast.LENGTH_SHORT).show();
+                    resultDisplay.setText("Update Success!!!");
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ServerResponse> call, @NonNull Throwable t) {
+//                Toast.makeText(context, "Add Failed!!!", Toast.LENGTH_SHORT).show();
+                resultDisplay.setText("Update Failed!!!");
                 Log.d("Add Error", t.toString());
             }
         });
